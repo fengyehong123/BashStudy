@@ -1,2 +1,2 @@
-# Bash_Study
+# BasStudy
 Bash脚本学习
