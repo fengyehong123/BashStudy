@@ -29,10 +29,12 @@ echo '🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴分割线�
 echo "数值是:$my_var2"  # 数值是:110
 
 # ⏹如果变量不存在并不会报错，只是会输出空
+# shellcheck disable=SC2154
 echo "数值是:$my_var2_file"
 
 # ⏹读取变量的时候，变量名也可以使用花括号{}包围，可以用于变量名与其他字符连用的情况。
 # bash将 my_name_file 作为一个整体看待了，其实我们的变量名只是 my_name
+# shellcheck disable=SC2154
 echo "文件名的模板是: $my_name_file.txt"  # 文件名的模板是: .txt
 # 通过 ${} 来包裹变量名，可以正确进行输出
 echo "文件名的模板是: ${my_name}_file.txt"  # 文件名的模板是: fengyehong_file.txt
