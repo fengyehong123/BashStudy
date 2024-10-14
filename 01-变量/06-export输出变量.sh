@@ -16,7 +16,7 @@ echo "${name1} and ${name2}"
 echo -e "\e[1;31m/_/_/_/_/_/_/_/_/_/_/_/_/_/_子shell开始执行_/_/_/_/_/_/_/_/_/_/_/_/_/_/\e[0m"
 
 # ⏹在父shell中调用子shell，由于此时 name1 变量并没有通过 export 命令输出到子shell中，所以name1的打印为空
-bash ./01-变量/03-z_children.sh
+bash ./01-变量/06-z_children.sh
 
 echo -e "\e[1;31m/_/_/_/_/_/_/_/_/_/_/_/_/_/_子shell执行完毕_/_/_/_/_/_/_/_/_/_/_/_/_/_/\e[0m"
 
@@ -24,8 +24,8 @@ echo -e "\e[1;32m===========================子shell开始执行================
 
 # ⏹此时 name1 和 name2 变量都输出到子shell中，因此最终 打印出如下内容
 export name1
-bash ./01-变量/03-z_children.sh
-# 03-z_children.sh 执行了
+bash ./01-变量/06-z_children.sh
+# 06-z_children.sh 执行了
 # fegyehong
 # jiafeitian
 

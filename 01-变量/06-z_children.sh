@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-echo '03-z_children.sh 执行了'
+echo '06-z_children.sh 执行了'
 
 # 子shell中并没有定义 name1 和 name2 这两个变量
 # 对子shell来说，name1 和 name2 是环境变量
