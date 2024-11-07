@@ -66,5 +66,5 @@ done < 00-file.txt
 
 # 输出数组内的元素
 for element in "${line_array[@]}"; do
-  echo "$element"
+    echo "$element"
 done
