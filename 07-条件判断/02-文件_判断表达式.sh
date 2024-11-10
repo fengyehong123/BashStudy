@@ -10,6 +10,8 @@
 # ⏹文件判断
 # [ -e file ]
 #            如果 file 存在，则为true。
+# [ -f file ]
+#            如果 file 存在并且是一个普通文件，则为true。
 # [ -s file ]
 #            如果 file 存在且其长度大于零，则为true。
 # [ -L file ]
