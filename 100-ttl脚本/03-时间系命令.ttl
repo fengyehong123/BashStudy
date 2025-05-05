@@ -1,0 +1,31 @@
+; 执行自动登录脚本
+include '00-自動ログイン.ttl'
+
+; 将要弹窗的窗口的大小设置为最小
+show 0
+
+; 获取当前时间，默认的格式是 yyyy-mm-dd
+getdate datestr1
+messagebox datestr1 '默认的时间格式'
+
+; 获取当前时间，指定时间格式为 yyyymmdd
+getdate datestr2 '%Y%m%d'
+messagebox datestr2 'yyyymmdd的时间格式'
+
+; 获取当前时间，指定时间格式为 yyyymmddyyyy/m/d hh:nn:ss
+getdate datestr3 '%Y/%#m/%#d %H:%M:%S'
+messagebox datestr3 'yyyy/m/d hh:nn:ss的事件格式'
+
+; 将窗口恢复为原先的大小
+show 1
+; =============================================================
+
+; 获取当前的时刻，默认的格式是 HH:MM:SS
+gettime timestr1
+sendln 'echo 默认的时刻格式为 → ' timestr1
+wait '$' '#'
+
+; 指定时刻的格式
+gettime logFileName "log-%Y%m%d-%H%M%S.txt" 
+sendln 'echo → ' logFileName
+wait '$' '#'

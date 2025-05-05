@@ -1,25 +1,12 @@
-;=====================================================================
-; 定义连接服务器的变量参数
-HOSTADDR = '192.168.118.136'
-USERNAME = 'apluser'
-PASSWORD = 'apluser'
-;=====================================================================
-
-; 拼接连接服务器的命令
-COMMAND = HOSTADDR
-strconcat COMMAND ':22 /ssh /2 /auth=password /user='
-strconcat COMMAND USERNAME
-strconcat COMMAND ' /passwd='
-strconcat COMMAND PASSWORD
-
-; 连接服务器
-connect COMMAND
+; 在当前脚本中执行外部的脚本，文件名可以是日文或者英文，但是不能有中文
+include '00-自動ログイン.ttl'
 
 ; 获取当前的脚本所在的文件夹，将结果存入自定义的 CurrentDir 变量
 getdir CurrentDir
 
 ; 提问框
 yesnobox '你确定将当前ttl脚本所在的文件夹路径显示控制台上吗?' 'Tera Term'
+; result 是一个系统变量，用来存储 yesnobox 的执行结果
 if result then
 
     ; 发送命令到控制台去执行
@@ -68,5 +55,3 @@ sendln 'echo aaa cal hoge fuga'
 waitln 'cal'
 ; 消息弹出框
 messagebox inputstr "str"
-
-

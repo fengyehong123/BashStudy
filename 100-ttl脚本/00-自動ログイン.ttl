@@ -1,0 +1,16 @@
+;=====================================================================
+; 定义连接服务器的变量参数
+HOSTADDR = '192.168.118.136'
+USERNAME = 'apluser'
+PASSWORD = 'apluser'
+;=====================================================================
+
+; 拼接连接服务器的命令
+COMMAND = HOSTADDR
+strconcat COMMAND ':22 /ssh /2 /auth=password /user='
+strconcat COMMAND USERNAME
+strconcat COMMAND ' /passwd='
+strconcat COMMAND PASSWORD
+
+; 连接服务器
+connect COMMAND
