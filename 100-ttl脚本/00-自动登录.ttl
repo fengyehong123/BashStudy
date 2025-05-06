@@ -1,0 +1,46 @@
+;=====================================================================
+; 配置信息
+HOSTADDR = '192.168.118.136' ; 默认host地址
+USERNAME = 'apluser'
+PASSWORD = 'apluser'
+;=====================================================================
+
+; 定义一个数组,里面放2个元素
+strdim ENVARRY 2
+ENVARRY[0] = 'Ubuntu环境'
+ENVARRY[1] = 'Centos环境'
+
+listbox '请选择连接的环境' '连接环境选择' ENVARRY
+if result = 0 then
+    ; 定义一个能存放2个元素的字符串数组
+    strdim HOSTARRAY 2
+    HOSTARRAY[0] = '192.168.118.136'
+    HOSTARRAY[1] = '192.168.118.135'
+elseif result = 1 then
+    strdim HOSTARRAY 2
+    HOSTARRAY[0] = '192.168.118.136'
+    HOSTARRAY[1] = '192.168.118.135'
+else
+    ; 结束ttl脚本
+    end
+endif
+
+listbox '请选择连接的host' 'host选择' HOSTARRAY
+if result = -1 then
+    ; 结束ttl脚本
+    end
+else
+    ; 获取出当前选择的机器的ip地址
+    HOSTADDR = HOSTARRAY[result]
+endif
+
+; 拼接连接命令
+COMMAND = HOSTADDR
+strconcat COMMAND ':22 /ssh /2 /auth=password /user='
+strconcat COMMAND USERNAME
+strconcat COMMAND ' /passwd='
+strconcat COMMAND PASSWORD
+
+; 连接服务器之后，结束当前ttl脚本
+connect COMMAND
+end

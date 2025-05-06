@@ -23,16 +23,41 @@ endif
 sendln "echo 要循环的次数为: " inputstr
 wait '$' '#'
 
-; 将当前的主窗口给显示出来
-show 1
-
 ; 将输入的字符串数字 转换为 普通的数字类型
 str2int LoopCount inputstr
 
-; 循环指定的次数
+; ⏹通过 for next 的语法 循环指定的次数
 for i 1 LoopCount
+
+    if i == 2 then
+        sendln 'echo continue跳出循环。。。 '
+        wait username
+        ; 跳出此次循环
+        continue
+    endif
+
+    if i >= 5 then
+        sendln "echo -e 'break终止循环。。。\n' "
+        wait username
+        ; 终止此次循环
+        break
+    endif
+
     sendln 'echo hello world! ' username
     ; username是ttl脚本中的系统变量，用于标识当前登录的用户名
     wait username
 next
 
+; 停止执行1秒
+pause 1
+
+; 将当前的主窗口给显示出来
+show 1
+
+; ⏹通过 while endwhile 的语法 循环指定的次数
+i = 0
+while i < LoopCount
+    i = i + 1
+    sendln 'echo 你好,世界 ' username
+    wait username
+endwhile
