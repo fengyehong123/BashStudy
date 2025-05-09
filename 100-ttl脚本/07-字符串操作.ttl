@@ -1,0 +1,144 @@
+; 执行自动登录脚本
+include '00-自動ログイン.ttl'
+
+; 将脚本终止1秒钟，目的是等到登录界面完全显示之后
+; 再继续执行下面的脚本，可以保证弹出框显示在登录界面的上一层
+pause 1
+
+; 定义一个字符串变量
+line = 'abcdef'
+
+/*
+    ⏹计算字符串变量的长度
+        1. 变量的长度是通过字节来计算的
+        2. 如果我们的变量值是一个日语假名
+           那么得到的字节是2个字节
+*/
+strlen line
+; 字符串的长度是一个int的数字类型, 将数字转换为字符串类型
+int2str lengthStr result
+
+; 执行命令
+sendln 'echo 字符串变量的长度为: ' lengthStr
+wait username
+
+; ⏹字符串拼接
+str1 = '你好'
+strconcat str1 ',世界'
+
+; 执行命令
+sendln 'echo ' str1
+wait username
+
+; ⏹字符串比较, 当result为0的时候, 两个字符串相等; 否则不相等
+strcompare 'abc' 'def'
+if result != 0 then
+    sendln 'echo "变量的值并不相等"'
+    wait username
+endif
+
+str2 = 'abc'
+strcompare 'abc' str2
+if result == 0 then
+    sendln 'echo "变量的值其实是相等的"'
+    wait username
+endif
+
+/*
+    ⏹字符串组合
+        1. groupmatchstr1 ~ groupmatchstr9 是系统变量
+        2. 只能有9个变量
+*/
+; 定义9个变量
+groupmatchstr1="Jan"
+groupmatchstr2="Feb"
+groupmatchstr3="Mar"
+groupmatchstr4="Apr"
+groupmatchstr5="May"
+groupmatchstr6="Jun"
+groupmatchstr7="Jul"
+groupmatchstr8="Aug"
+groupmatchstr9="Sep"
+
+; 不指定组合的变量的数量的话, 默认是9个
+strjoin str3 ","
+
+sendln 'echo 通过逗号组合之后的内容是: ' str3
+wait username
+
+; 虽然有9个变量，但是指定值组合5个
+strjoin str4 "," 5
+sendln 'echo 通过逗号组合之后的内容是: ' str4
+wait username
+
+sendln 'echo "================================"'
+wait username
+
+; 定义一个逗号分割的字符串
+str5 = 'Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep'
+/*
+    ⏹字符串分割
+        1. 可以指定分割的次数, 如果不指定就默认分割9次
+        2. 例子中的字符串可以分隔9次, 但是我们指定分割7次, 那么没有被分割的变量就会都放到 groupmatchstr7 中
+        3. 实际分割成功的次数会存储在 result 变量中
+*/
+strsplit str5 ',' 7
+
+; 将数字转换为一个字符串
+int2str count result
+sendln 'echo 字符串分割的次数为: ' count
+wait username
+
+sendln 'echo 变量值为: ' groupmatchstr1
+wait username
+
+sendln 'echo 变量值为: ' groupmatchstr2
+wait username
+
+sendln 'echo 变量值为: ' groupmatchstr3
+wait username
+
+sendln 'echo 变量值为: ' groupmatchstr4
+wait username
+
+sendln 'echo 变量值为: ' groupmatchstr5
+wait username
+
+sendln 'echo 变量值为: ' groupmatchstr6
+wait username
+
+sendln 'echo 变量值为: ' groupmatchstr7
+wait username
+
+sendln 'echo 变量值为: ' groupmatchstr8
+wait username
+
+sendln 'echo 变量值为: ' groupmatchstr9
+wait username
+
+sendln 'echo "================================"'
+wait username
+
+; 定义一个含有特殊文字的字符串
+str6 = "你好\n世界\t哈哈"
+/*
+    ⏹转换特殊文字
+        1. 将 \\ 转换为 \
+        2. 将 \n 转换为 换行符
+        3. 将 \t 转换为 tab空格
+*/
+strspecial str6
+messagebox str6 "特殊文字"
+
+; 定义一个字符串
+str7 = "abc"
+/*
+    ⏹向字符串的指定位置的下标插入指定的内容
+    注意下标的位置, 否则会造成越界的错误
+*/
+strinsert str7 2 "xyz"
+
+sendln 'echo 插入之后的字符串为: ' str7
+; 插入之后的字符串为: axyzbc
+wait username
+
