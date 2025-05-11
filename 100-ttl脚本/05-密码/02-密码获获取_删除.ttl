@@ -1,0 +1,23 @@
+; 返回当前脚本的上一层,然后执行自动登录脚本
+include '../00-自动登录/00-自動ログイン.ttl'
+
+; 将脚本终止1秒钟，目的是等到登录界面完全显示之后
+; 再继续执行下面的脚本，可以保证弹出框显示在登录界面的上一层
+pause 1
+
+; 保存密码的文件名
+password_file_name = 'password.dat'
+; 一个密码文件可以保存多个密码, 设定获取指定密码的识别key
+password_get_key = 'apluser_pass'
+
+; ⏹从密码文件中, 将保存的密码获取出来
+getpassword password_file_name password_get_key passwd
+
+; 打印密码文件中保存的密码
+sendln 'echo "密码文件中保存的密码为 → ' passwd '"'
+wait username
+
+; ⏹从密码文件中删除密码
+delpassword password_file_name password_get_key
+sendln 'echo "密码删除成功..."'
+wait username

@@ -1,0 +1,35 @@
+; 调用其他ttl脚本, 弹出密码输入框
+include '../04-box系列/04-passwordbox.ttl'
+
+; 如果用户没有输入密码的话, 直接停止脚本执行
+strlen inputstr
+if result < 1 then
+    ; 停止当前ttl脚本的执行
+    exit
+endif
+
+; 打印用户输入的密码
+sendln 'echo "用户输入的密码为 → ' inputstr '"'
+wait username
+
+; 用户输入的密码
+user_password = inputstr
+; 保存密码的文件名
+password_file_name = 'password.dat'
+; 一个密码文件可以保存多个密码, 设定获取指定密码的识别key
+password_get_key = 'apluser_pass'
+
+; ⏹将当前用户输入的密码保存到指定的文件中
+setpassword password_file_name  password_get_key user_password
+; 如果密码保存失败
+if result == 0 then
+    ; 消息弹框
+    messagebox '密码保存失败,脚本停止执行' 'Tera Term'
+    exit
+endif
+
+sendln 'echo "保存密码到文件成功..."'
+wait username
+
+; 将当前的主窗口给显示出来
+show 1

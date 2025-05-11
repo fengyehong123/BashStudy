@@ -1,0 +1,70 @@
+; 返回当前脚本的上一层,然后执行自动登录脚本
+include '../00-自动登录/00-自動ログイン.ttl'
+
+; 将脚本终止1秒钟，目的是等到登录界面完全显示之后
+; 再继续执行下面的脚本，可以保证弹出框显示在登录界面的上一层
+pause 1
+
+; ⏹如果保存log的文件夹不存在的话, 就新建一个
+log_save_folder = "ttl_log"
+foldersearch log_save_folder
+if result <> 1 then
+    ; 新建文件夹
+    foldercreate log_save_folder
+endif
+
+; 获取当前脚本所在文件夹
+getdir current_ttl_dir
+
+; 日志的全路径
+getdate log_name "%Y%m%d_%H%M%S_ttl_macro_prod.log"
+sprintf2 log_full_path "%s\%s\%s" current_ttl_dir log_save_folder log_name
+
+/*
+    💥💥💥注意事项💥💥💥
+    在 tera term 的 5.4 版本中
+        当复制命令粘贴到终端上执行时, log会显示两行(虽然我们只粘贴了一行)
+    解决办法:
+        找到 TERATERM.INI 配置文件
+        然后将 BracketedControlOnly 改为 on 即可解决该问题
+    参考链接:
+        1. https://teratermproject.github.io/manual/5/ja/about/glossary.html 的 制御シーケンス 部分
+        2. https://github.com/TeraTermProject/teraterm/issues/220
+        3. https://teratermproject.github.io/manual/5/ja/about/history.html 的 2024.09.08 (Ver 5.3) 部分
+*/
+; 汉字和换行文字会转换之后再写入
+binary_flag = 0
+; 如果log文件本身就存在的话, 不覆盖log文件, 而是追加内容
+append_flag = 1
+; 0 开启纯文本模式, ASCII等非表示文字也会被写入
+; 1 关闭纯文本模式, ASCII等非表示文字不会被写入
+plain_text_flag = 1
+; 不在log开头显示时间戳
+timestamp_flag = 0
+; 不显示log窗口
+hide_dialog_flag = 1
+; 屏幕上的缓存，不会先写入日志中
+include_screen_buffer_flag = 0
+
+; 开启log自动记录
+logopen log_full_path binary_flag append_flag plain_text_flag timestamp_flag hide_dialog_flag include_screen_buffer_flag
+
+; 先向log中写入下面的内容
+logwrite 'Log start'#13#10
+logwrite '*****************************************************'#13#10
+
+; 打印
+sendln 'echo "保存log的路径为 → ' log_full_path '"'
+wait username
+
+; 中断log打印
+logpause
+
+sendln 'echo "内容1111..."'
+wait username
+
+sendln 'echo "内容2222..."'
+wait username
+
+; 继续开始记录log
+logstart
