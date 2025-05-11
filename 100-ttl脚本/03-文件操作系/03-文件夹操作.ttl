@@ -1,0 +1,59 @@
+; 返回当前脚本的上一层,然后执行自动登录脚本
+include '../00-自动登录/00-自動ログイン.ttl'
+
+; 将脚本终止1秒钟，目的是等到登录界面完全显示之后
+; 再继续执行下面的脚本，可以保证弹出框显示在登录界面的上一层
+pause 1
+
+; ⏹获取当前ttl脚本所在文件夹路径
+getdir ttl_folder_path
+sendln 'echo "当前作业文件夹为 → ' ttl_folder_path '"'
+wait username
+
+work_folder_name = 'Test_Folder'
+/*
+    ⏹判断当前文件夹是否存在
+        存在
+            result = 1
+        不存在
+            result = 0
+*/
+foldersearch work_folder_name
+; 如果文件夹不存在
+if result <> 1 then
+    ; ⏹新建文件夹
+    foldercreate work_folder_name
+endif
+
+; 拼接工作文件夹的全路径
+sprintf2 full_work_folder_path '%s\%s' ttl_folder_path work_folder_name
+; ⏹指定新的作业文件夹
+setdir full_work_folder_path
+
+; 打印
+sendln 'echo "当前作业文件夹为 → ' full_work_folder_path '"'
+wait username
+pause 2
+
+; 新创建一个文件
+new_file_name = 'test_1.txt'
+filecreate fileHandle new_file_name
+fileclose fileHandle
+
+; ⏹拼接路径
+makepath full_path full_work_folder_path new_file_name
+
+; 打印
+sendln 'echo "新文件的绝对路径为: → ' full_path '"'
+wait username
+pause 2
+
+; 删除文件
+filedelete new_file_name
+
+; 删除文件夹(只能删除空文件夹)
+folderdelete full_work_folder_path
+if result == 0 then
+    sendln 'echo "删除成功的文件夹为 → ' full_work_folder_path '"'
+    wait username
+endif

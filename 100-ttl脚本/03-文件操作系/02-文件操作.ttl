@@ -1,0 +1,121 @@
+; 返回当前脚本的上一层,然后执行自动登录脚本
+include '../00-自动登录/00-自動ログイン.ttl'
+
+; 将脚本终止1秒钟，目的是等到登录界面完全显示之后
+; 再继续执行下面的脚本，可以保证弹出框显示在登录界面的上一层
+pause 1
+
+; 定义要新创建的文件名
+bat_file_name = 'test.bat'
+
+/*
+    ⏹查询文件是否存在
+        文件存在
+            result = 1
+        文件不存在
+            result = 0
+*/
+filesearch bat_file_name
+; 若文件存在, 则终止脚本的运行
+if result == 1 then
+    sendln 'echo "' bat_file_name '文件存在, 脚本终止..."'
+    wait username
+    ; 终止脚本运行
+    end
+endif 
+
+; ======================================================================================
+; ⏹新建一个空文件
+filecreate fileHandle bat_file_name
+; ⏹关闭文件句柄, 保存文件
+fileclose fileHandle
+; ======================================================================================
+
+; /_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
+/*
+    ⏹打开一个文件,当文件不存在的时候,会创建之后再打开
+        参数1: fileHandle
+            文件句柄的变量名称
+        参数2: 'test.bat'
+            文件名称
+        参数3:
+            0 
+                指针放置于文件的开头处
+            0之外的数字 
+                指针放置于文件的结尾处
+*/
+; ⏹1. 在当前脚本所在的文件夹内打开一个名为【test.bat】的文件
+fileopen fileHandle bat_file_name 0
+
+; ⏹2. 将文件的句柄上锁, 防止其他线程访问
+filelock fileHandle
+
+; ⏹3. 通过打开之后的文件句柄, 向文件内写入内容
+filewrite fileHandle 'md .\jmwTest'
+
+; ⏹4. 将文件的句柄解锁
+fileunlock fileHandle
+
+; ⏹5. 关闭文件句柄, 保存文件
+fileclose fileHandle
+; /_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
+
+; ⏹获取当前ttl脚本所在文件夹路径
+getdir ttl_folder_path
+
+; ⏹格式化出要执行的cmd命令
+sprintf2 bat_cmd '%s\%s' ttl_folder_path bat_file_name
+
+; 打印要执行的命令
+sendln 'echo "要执行的cmd命令为 → ' bat_cmd '"'
+wait username
+pause 1
+
+/*
+    ⏹执行刚创建好的bat脚本
+        "hide"
+            执行时隐藏窗口
+        1
+            exec命令启动的程序结束之前进行等待
+*/
+exec bat_cmd "hide" 1
+
+sendln 'echo cmd命令执行完毕...'
+wait username
+
+; 准备要被复制的文件名
+file_copy_name = "copy_file.txt"
+/*
+    ⏹文件复制
+        bat_file_name 复制为 file_copy_name
+*/ 
+filecopy bat_file_name file_copy_name
+; 暂停程序2秒
+pause 2
+
+; ======================================================================================
+; ⏹文件删除
+filedelete bat_file_name
+if result == 0 then
+    sendln 'echo "' bat_file_name '的文件已经被删除..."'
+    wait username
+endif
+
+filedelete file_copy_name
+if result == 0 then
+    sendln 'echo "' file_copy_name '的文件已经被删除..."'
+    wait username
+endif
+; ======================================================================================
+
+; 脚本暂停3秒
+pause 3
+
+; 拼接新创建的文件夹的名称
+sprintf2 new_create_folder_path '%s\%s' ttl_folder_path "jmwTest"
+; ⏹文件夹删除
+folderdelete new_create_folder_path
+if result == 0 then
+    sendln 'echo "' new_create_folder_path '的文件已经被删除..."'
+    wait username
+endif

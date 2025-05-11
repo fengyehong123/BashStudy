@@ -1,0 +1,50 @@
+; 执行自动登录脚本
+include '../00-自动登录/00-自動ログイン.ttl'
+
+; 将脚本终止1秒钟，目的是等到登录界面完全显示之后
+; 再继续执行下面的脚本，可以保证弹出框显示在登录界面的上一层
+pause 1
+
+/*
+    ⏹格式化内容
+    1. 格式化的内容会保存到 inputstr 的系统变量中
+    2. 格式化的结果会保存到 result 的系统变量中
+        0 成功
+        1 没有指定格式
+        2 格式指定不正确
+        3 参数不正确
+*/
+; %d → 十进制整数
+sprintf 'Tera Term 4.%d' 5156
+if result == 0 then
+    sendln 'echo 格式化之后的结果为 → ' inputstr
+    ; 格式化之后的结果为 → Tera Term 4.5156
+    wait username
+endif
+
+; %s → 字符串
+sprintf 'Windows %d (%s)' 2000 'SP4测试SP4'
+sendln 'echo "格式化之后的结果为 → ' inputstr '"'
+; 格式化之后的结果为 → Windows 2000 (SP4测试SP4)
+wait username
+
+; %x → 小写的十六进制整数, 33 转换为16进制就是 21
+sprintf '%s=%d %s=0x%x' 'dec' 10 'hex' 33
+sendln 'echo "格式化之后的结果为 → ' inputstr '"'
+; 格式化之后的结果为 → dec=10 hex=0x21
+wait username
+
+sendln 'echo "================================"'
+wait username
+
+/*
+    ⏹sprintf2
+        用法和 sprintf 基本相同，只是可以把格式后的结果存入指定的变量中
+*/
+; 将格式化之后的变量存入 ver1 变量中
+sprintf2 ver1 'Tera Term 4.%d' 5156
+if result == 0 then
+    sendln 'echo 格式化之后的结果为 → ' ver1
+    ; 格式化之后的结果为 → Tera Term 4.5156
+    wait username
+endif
