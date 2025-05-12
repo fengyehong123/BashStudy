@@ -1,0 +1,47 @@
+; 返回当前脚本的上一层,然后执行自动登录脚本
+include '../00-自动登录/00-自動ログイン.ttl'
+
+; 将脚本终止1秒钟，目的是等到登录界面完全显示之后
+; 再继续执行下面的脚本，可以保证弹出框显示在登录界面的上一层
+pause 1
+
+; 定义一个可以存放7个元素的字符串数组
+strdim var_type_list 7
+; 向数组中添加内容
+var_type_list[0] = '类型没有被定义'
+var_type_list[1] = '整数类型'
+var_type_list[2] = '测试'
+var_type_list[3] = '字符串类型'
+var_type_list[4] = 'lable类型'
+var_type_list[5] = '整数数组类型'
+var_type_list[6] = '字符串数组类型'
+
+; 循环打印字符串数组内容
+for i 0 6 
+    ; 打印
+    sendln 'echo "字符串数组的内容是 → ' var_type_list[i] '"'
+    wait username
+next
+
+; 分割线
+sendln 'echo "=========================================="'
+wait username
+
+; 定义一个可以存放5个元素的整数数组
+intdim num_array 5
+; 向数组中添加元素
+num_array[0] = 100
+num_array[1] = 56
+num_array[2] = 42
+num_array[3] = 15
+num_array[4] = 23
+
+for i 0 4
+
+    ; 数字 转换为 数字字符串
+    int2str str_num num_array[i]
+
+    ; 打印
+    sendln 'echo "整数数组的元素是 → ' str_num '"'
+    wait username
+next

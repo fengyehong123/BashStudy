@@ -4,13 +4,17 @@ HOSTADDR = '192.168.118.136'
 USERNAME = 'apluser'
 PASSWORD = 'apluser'
 ;=====================================================================
+/*
+⏹通过strconcat函数来拼接连接服务器的命令
+    COMMAND = HOSTADDR
+    strconcat COMMAND ':22 /ssh /2 /auth=password /user='
+    strconcat COMMAND USERNAME
+    strconcat COMMAND ' /passwd='
+    strconcat COMMAND PASSWORD
+*/
 
-; 拼接连接服务器的命令
-COMMAND = HOSTADDR
-strconcat COMMAND ':22 /ssh /2 /auth=password /user='
-strconcat COMMAND USERNAME
-strconcat COMMAND ' /passwd='
-strconcat COMMAND PASSWORD
+; 格式化连接服务器的命令
+sprintf2 COMMAND "%s:22 /ssh /2 /auth=password /user=%s /passwd=%s" HOSTADDR USERNAME PASSWORD
 
 ; 连接服务器
 connect COMMAND

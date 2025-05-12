@@ -50,7 +50,8 @@ include_screen_buffer_flag = 0
 logopen log_full_path binary_flag append_flag plain_text_flag timestamp_flag hide_dialog_flag include_screen_buffer_flag
 
 ; 先向log中写入下面的内容
-logwrite 'Log start'#13#10
+logwrite 'Log start'#13#10  ; 13、10 是 CR、LF 的 ASCII码, 此处用来换行
+; 参考资料: https://teratermproject.github.io/manual/5/ja/macro/appendixes/newline.html
 logwrite '*****************************************************'#13#10
 
 ; 打印

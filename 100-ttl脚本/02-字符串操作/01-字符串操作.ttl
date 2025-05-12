@@ -50,15 +50,15 @@ endif
         2. 只能有9个变量
 */
 ; 定义9个变量
-groupmatchstr1="Jan"
-groupmatchstr2="Feb"
-groupmatchstr3="Mar"
-groupmatchstr4="Apr"
-groupmatchstr5="May"
-groupmatchstr6="Jun"
-groupmatchstr7="Jul"
-groupmatchstr8="Aug"
-groupmatchstr9="Sep"
+groupmatchstr1 = "Jan"
+groupmatchstr2 = "Feb"
+groupmatchstr3 = "Mar"
+groupmatchstr4 = "Apr"
+groupmatchstr5 = "May"
+groupmatchstr6 = "Jun"
+groupmatchstr7 = "Jul"
+groupmatchstr8 = "Aug"
+groupmatchstr9 = "Sep"
 
 ; 不指定组合的变量的数量的话, 默认是9个
 strjoin str3 ","

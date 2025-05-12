@@ -8,22 +8,8 @@ pause 1
 ; 创建 arr1 到 arr10的变量
 for countNum 1 10
 
-    ; 将数字的countNum变量 转换为 字符串的countStr变量
-    int2str countStr countNum
-
-    ;定义一个临时变量
-    tmp = 'arr'
-
-    ; 在for循环中进行字符串拼接, 拼接出这种字符串
-    /*
-        arr1=1
-        arr2=2
-        arr3=3
-    */
-    strconcat tmp countStr
-    strconcat tmp '='
-    strconcat tmp countStr
-
+    ; 拼接 arr1 = 1 这样的字符串
+    sprintf2 tmp "arr%d = %d" countNum countNum
     ; ⏹将字符串当做ttl脚本命令执行, 从而实现动态的定义变量
     execcmnd tmp
 next
@@ -31,22 +17,13 @@ next
 ; 隐藏输入框的宏窗口部分
 show 0
 
+; 动态进行10次弹窗
 for countNum 1 10
 
-    ; 将数字的countNum变量 转换为 字符串的countStr变量
-    int2str countStr countNum
-
-    ; 动态拼接下面的字符串
-    ; messagebox arr1 'variable1'
-    cmd = 'messagebox '
-    strconcat cmd 'arr'
-    strconcat cmd countStr
-    strconcat cmd " 'variable"
-    strconcat cmd countStr
-    strconcat cmd "'"
-
+    ; 拼接 messagebox arr1 "variable1" 这样的字符串
+    sprintf2 messagebox_exe_cmd 'messagebox arr%d "variable%d"' countNum countNum
     ; 动态执行ttl字符串脚本
-    execcmnd cmd
+    execcmnd messagebox_exe_cmd
 next
 
 ; 将当前的主窗口给显示出来

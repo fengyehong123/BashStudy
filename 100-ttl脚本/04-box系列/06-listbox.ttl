@@ -8,3 +8,46 @@ pause 1
 ; 隐藏输入框的宏窗口部分
 show 0
 
+; 定义一个能存放3个元素的数组
+strdim server_list 3
+; 向数组中添加元素
+server_list[0] = 'ubuntu服务器'
+server_list[1] = 'win11服务器'
+server_list[2] = 'macOS服务器'
+
+; 默认被选中的项目
+default_selected_item_index = 1
+; 选择框的样式(字符串;可指定多个)
+box_style_1 = 'minmaxbutton=on'
+
+/*
+    ⏹通过listbox进行展示
+    参数1
+       弹出框表示的信息 
+    参数2
+       弹出框的标题
+    参数3
+       listbox的项目
+    参数4
+       初始化时,默认被选中的项目
+    参数5
+       listbox的样式
+*/
+listbox '请选择想要安装的服务器' '服务器选择' server_list default_selected_item_index box_style_1
+; 若用户未进行任何选择的话
+if result = -1 then
+
+    sendln 'echo "用户未选择任何服务器, ttl脚本终止..."'
+    wait username
+
+    ; 结束ttl脚本
+    exit
+endif
+
+; 获取用户选择的服务器名称
+server_name = server_list[result]
+sendln 'echo "用户选择的服务器名称为 → ' server_name '"'
+wait username
+
+; 展示窗体的主体部分
+show 1
