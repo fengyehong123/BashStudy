@@ -1,0 +1,55 @@
+; 返回当前脚本的上一层,然后执行自动登录脚本
+include '../00-自动登录/00-自動ログイン.ttl'
+
+pause 1
+
+/*
+    ⏹TTL脚本的基本数类型有4种
+    1. 整数
+    2. 字符串
+    3. 整数数组
+    4. 字符串数组
+*/
+
+; 整数
+num1 = 100
+
+; 字符串, 单引号和双引号包裹都可以
+str1 = 'Hello World'
+str1 = "你好,世界"
+
+; 整数串数组
+intdim int_arry1 3
+int_arry1[0] = 0
+int_arry1[1] = 1
+int_arry1[2] = 2
+
+; 字符串数组
+strdim str_arry1 3
+str_arry1[0] = 'a'
+str_arry1[1] = 'b'
+str_arry1[2] = 'c'
+
+/*
+    ⏹一个文字还可以用ASCII码来表示, 在开头添加 # 即可
+    用来表示的ASCII码
+        可以是10进制
+        也可以是16进制
+            开头需添加 $
+
+    ⏹官方ASCII码表
+        https://teratermproject.github.io/manual/5/ja/macro/appendixes/ascii.html
+*/
+; #$41 是16进制的英文字母 A ,可以直接和字符串拼接 
+str2 = "我有一个英文字母: "#$41
+; 打印
+sendln 'echo "str2字符串内容是 → ' str2 '"'
+; str2字符串内容是 → 我有一个英文字母: A
+wait username
+
+; #65 是10进制的英文字母 A
+str3 = "我有一个英文字母: "#65
+; 打印
+sendln 'echo "str3字符串内容是 → ' str3 '"'
+; str3字符串内容是 → 我有一个英文字母: A
+wait username

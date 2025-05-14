@@ -1,1 +1,17 @@
-; getttdir
+; 返回当前脚本的上一层,然后执行自动登录脚本
+include '../00-自动登录/00-自動ログイン.ttl'
+; 暂停1秒
+pause 1
+
+/*
+    ⏹获取ttpmacro.exe所属的文件夹路径
+    获取成功
+        result = 1
+    获取失败
+        result = 0
+*/
+getttdir ttpmacro_dir_path
+; 打印
+sendln 'echo "ttpmacro.exe所属的文件夹路径为 → ' ttpmacro_dir_path '"'
+; ttpmacro.exe所属的文件夹路径为 → C:\soft\teraterm-5.4.0
+wait username

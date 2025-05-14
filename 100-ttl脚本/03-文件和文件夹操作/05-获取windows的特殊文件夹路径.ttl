@@ -1,1 +1,31 @@
-; getspecialfolder
+; 返回当前脚本的上一层,然后执行自动登录脚本
+include '../00-自动登录/00-自動ログイン.ttl'
+; 暂停1秒
+pause 1
+
+/*
+    ⏹获取Windows上的特殊文件夹路径
+    1. Desktop
+        当前用户的桌面路径 
+        C:\Users\用户名\Desktop
+    2. AllUsersDesktop
+        所有用户共享的桌面文件夹
+        C:\Users\Public\Desktop
+    3. MyDocuments
+        我的文档文件夹
+        C:\Users\用户名\Documents
+*/
+getspecialfolder path1 "Desktop"
+; 打印
+sendln 'echo "Desktop对应的的路径为 → ' path1 '"'
+wait username
+
+getspecialfolder path2 "AllUsersDesktop"
+; 打印
+sendln 'echo "Desktop对应的的路径为 → ' path2 '"'
+wait username
+
+getspecialfolder path3 "MyDocuments"
+; 打印
+sendln 'echo "Desktop对应的的路径为 → ' path3 '"'
+wait username
