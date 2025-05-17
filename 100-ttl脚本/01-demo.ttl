@@ -50,15 +50,13 @@ sendln 'echo aaa cal hoge fuga'
             例如:【wait '$'】
                 【apluser@ubuntu24-01:~$】 中的 $ 就是控制台本身的一部分
 
-        
-         等待的是 控制台上的命令执行之后，控制台返回给我们的内容
+        waitln 等待的是 控制台上的命令执行之后，控制台返回给我们的内容
             例如:【waitln 'cal'】
                 apluser@ubuntu24-01:~/work$ echo aaa cal hoge fuga
             执行之后
                 apluser@ubuntu24-01:~/work$ echo aaa cal hoge fuga
                 aaa cal hoge fuga
                 apluser@ubuntu24-01:~/work
-    
     3. 使用【wait 'cal'】的话, 将没有效果，因为 cal 就不是控制台自身的一部分
 */
 ; 等待控制台上的命令执行之后，显示在控制台上的【cal】字符

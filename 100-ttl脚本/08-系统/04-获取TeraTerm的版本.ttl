@@ -3,4 +3,29 @@ include '../00-自动登录/00-自動ログイン.ttl'
 ; 暂停1秒
 pause 1
 
-; getver
+; ⏹获取当前TeraTerm的版本
+getver TeraTerm_Version
+
+; 打印信息到控制台
+sprintf2 linux_cmd 'echo "当前TeraTerm的版本为: %s"' TeraTerm_Version
+sendln linux_cmd
+wait username
+
+/*
+    ⏹获取到的版本号 和 '5.4' 的版本号比较
+        -2	版本号指定不正确
+        -1	版本号比 5.4 要旧
+        0	版本号和 5.4 相同
+        1	版本号比 5.4 要新
+*/
+getver version '5.4'
+if result >= 0 then
+    ; 选中TeraTerm窗口内的所有文字
+    callmenu 50280
+    ; 选中当前TeraTerm窗口显示的所有文字(相当于复制内容到剪贴板)
+    callmenu 50210
+    ; 取消选中(不取消的话, 窗口的文字会处于被选中的状态)
+    callmenu 50270
+    ; 相当于按下菜单栏上的 【ヘルプ】→ 【Tera Termについて】
+    callmenu 50990
+endif

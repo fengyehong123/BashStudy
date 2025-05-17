@@ -1,1 +1,36 @@
-; showtt
+; 返回当前脚本的上一层,然后执行自动登录脚本
+include '../00-自动登录/00-自動ログイン.ttl'
+; 暂停1秒
+pause 1
+
+/*
+    <show flag> が- 1 の場合
+        Tera Term 窗口隐藏
+    <show flag> が 0 の場合
+       Tera Term 窗口最小化
+    <show flag> が 1 の場合
+        Tera Term 窗口恢复原先的大小
+    <show flag> が 2 の場合
+        Tera Term 的 TEK窗口隐藏
+    <show flag> が 3 の場合
+        Tera Term 的 TEK窗口最小化
+    <show flag> が 4 の場合
+        打开 Tera Term 的 TEK窗口 或者 将其恢复原先的大小
+    <show flag> が 5 の場合
+        Tera Term 的 TEK窗口关闭
+    <show flag> が 6 の場合
+        隐藏log窗口
+    <show flag> が 7 の場合
+        最小化log窗口
+    <show flag> が 8 の場合
+        将log窗口恢复为原先大小
+*/
+
+; Tera Term を最小化
+showtt 0
+
+; 暂停脚本3秒
+pause 3
+
+; 将窗口恢复为原先的大小
+showtt 1

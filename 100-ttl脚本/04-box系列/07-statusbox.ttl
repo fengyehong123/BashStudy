@@ -5,4 +5,32 @@ include '../00-自动登录/00-自動ログイン.ttl'
 ; 再继续执行下面的脚本，可以保证弹出框显示在登录界面的上一层
 pause 1
 
-; statusbox
+; 指定弹窗的位置(弹窗的位置是相对于TeraTerm窗口而言的)
+setdlgpos 200 200
+
+; 计数用变量
+step = 0
+while 1
+    ; 调用自定义函数
+    call show_step
+
+    sendln 'echo "hello world"'
+    wait username
+
+    pause 2
+endwhile
+end
+
+; --------------------------------------------------------------
+; 定义一个lable
+:show_step
+step = step + 1
+
+; 获取当前的时间
+gettime time_msg "%Y/%m/%d-%H:%M:%S"
+sprintf2 title "counter %d" step
+; ⏹展示状态弹窗
+statusbox time_msg title
+
+return
+; --------------------------------------------------------------

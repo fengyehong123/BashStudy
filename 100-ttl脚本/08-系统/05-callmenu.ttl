@@ -1,0 +1,18 @@
+; 返回当前脚本的上一层,然后执行自动登录脚本
+include '../00-自动登录/00-自動ログイン.ttl'
+; 暂停1秒
+pause 1
+
+/*
+    ⏹菜单栏的项目所对应的id一览
+    https://infrapod.net/menu-id/
+*/
+
+; 选中TeraTerm窗口内的所有文字
+callmenu 50280
+; 选中当前TeraTerm窗口显示的所有文字(相当于复制内容到剪贴板)
+callmenu 50210
+; 取消选中(不取消的话, 窗口的文字会处于被选中的状态)
+callmenu 50270
+; 相当于按下菜单栏上的 【ヘルプ】→ 【Tera Termについて】
+callmenu 50990

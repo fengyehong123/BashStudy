@@ -1,0 +1,22 @@
+; 执行自动登录脚本
+include '../00-自动登录/00-自動ログイン.ttl'
+; 暂停脚本1秒
+pause 1
+
+; 获取系统的稼働時間
+uptime var
+; 将时间进行换算
+day = var / 86400000
+var = var % 86400000
+hour = var / 3600000
+var = var % 3600000
+min = var / 60000
+var = var % 60000
+sec = var / 1000
+
+; 拼接linux命令
+sprintf2 linux_cmd 'echo "System Up Time: %d Days, %d Hours, %d Minutes, %d Seconds"' day hour min sec
+
+; 打印
+sendln linux_cmd
+wait username

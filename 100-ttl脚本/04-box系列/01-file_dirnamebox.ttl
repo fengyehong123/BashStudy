@@ -34,9 +34,8 @@ dirnamebox '选择一个文件夹'
 if result <> 0 then
 
     ; 拼接字符串
-    tmpContent = '用户选择的文件夹为: '
-    strconcat tmpContent inputstr
+    sprintf2 msg "用户选择的文件夹为: %s" inputstr
 
     ; 弹窗显示
-	messagebox tmpContent 'selected directory'
+	messagebox msg 'selected directory'
 endif

@@ -1,1 +1,27 @@
-; random
+; 在当前脚本中执行外部的脚本，文件名可以是日文或者英文，但是不能有中文，否则无法识别
+include './00-自动登录/00-自動ログイン.ttl'
+
+; 将脚本终止1秒钟
+pause 1
+
+; 来一个无限循环
+while 1
+
+    ; 随机生成一个0到10的随机数
+	random num 10
+    if num == 9 then
+        ; 打印到控制台
+        sendln 'echo "生成的随机是9,程序退出..."'
+        wait username
+        break
+    endif
+
+    ; 拼接字符串
+    sprintf2 linux_cmd 'echo "当前生成的随机数: %d"' num
+
+    ; 打印到控制台
+    sendln linux_cmd
+    wait username
+
+    pause 1
+endwhile
