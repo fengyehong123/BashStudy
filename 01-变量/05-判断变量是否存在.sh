@@ -70,13 +70,13 @@ echo -e "\e[1;31m/_/_/_/_/_/_/_/_/_/_/_/_/_/_分割线_/_/_/_/_/_/_/_/_/_/_/_/_/
 # ------------------------------------------------------------
 # ⏹判断环境变量是否存在
 # ------------------------------------------------------------
-if printenv USERNAME > /dev/null 2>&1; then
+if printenv USERNAME >/dev/null 2>&1; then
     echo "环境变量 USERNAME 存在"  # 环境变量 USERNAME 存在
 else
     echo "环境变量 USERNAME 不存在"
 fi
 
-if printenv NOT_EXIST_NAME > /dev/null 2>&1; then
+if printenv NOT_EXIST_NAME >/dev/null 2>&1; then
     echo "环境变量 NOT_EXIST_NAME 存在"
 else
     echo "环境变量 NOT_EXIST_NAME 不存在"  # 环境变量 NOT_EXIST_NAME 不存在
