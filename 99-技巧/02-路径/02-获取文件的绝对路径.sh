@@ -8,4 +8,9 @@
 # 3. readlink -f
 #    用来显示文件的绝对路径
 # ------------------------------------------------------------------------
-find ./ -name "*.sh" -print0 | xargs -0 readlink -f
+# find 配合 readlink 获取文件的绝对路径
+find ./ -name "*.sh" -print0 | xargs -0 readlink -f | head
+echo -e "\e[1;31m/_/_/_/_/_/_/_/_/_/_/_/_/_/_分割线_/_/_/_/_/_/_/_/_/_/_/_/_/_/\e[0m"
+
+# find 配合 realpath 获取文件的绝对路径
+find ./ -name "*.sh" -print0 | xargs -0 realpath | head

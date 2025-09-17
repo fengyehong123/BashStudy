@@ -54,7 +54,7 @@ JAVA_FILE_BASENAME=$(basename "$JAVA_FILE_PATH" '.java')
 echo '____________________________________'
 echo "$JAVA_FILE_PATH"
 echo "$JAVA_FILE_BASENAME"
-echo '____________________________________'
+echo '‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾'
 
 # 执行编译后的java代码
 java_result=$(java "$JAVA_FILE_BASENAME")
@@ -63,7 +63,7 @@ echo "Java程序的退出码是: $?"
 echo -e "java程序的结果是: $java_result\n"
 
 # 删除生成的.class文件
-sleep 1
+sleep 2
 rm "${JAVA_FILE_BASENAME}.class"
 
 # 返回到原目录
