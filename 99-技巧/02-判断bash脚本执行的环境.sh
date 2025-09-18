@@ -28,7 +28,6 @@ function detect_os2() {
     fi
 }
 
-
 function detect_os3() {
 
     # 通过【OSTYPE】变量来判断
@@ -41,7 +40,7 @@ function detect_os3() {
     fi
 }
 
-# 调用函数, 获取返回值
+# 调用函数, 获取echo打印的值
 os_type1=$(detect_os1)
 echo "$os_type1"
 
