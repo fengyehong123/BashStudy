@@ -25,6 +25,8 @@ PASSWD='nosecret'
 FILE_NAME='test_mpl_ws_api'
 # pem公钥所对应的key名称
 PEM_PUBLIC_KEY='PEM_PUBLIC_KEY_PATH'
+# 组织信息
+DNAME_INFO='CN=KDDI, OU=IT, O=MyCompany, L=Tokyo, ST=Tokyo, C=JP'
 
 # 创建一个关联数组, 关联数组中的key和value都可以使用变量
 declare -A filePathMap=(
@@ -47,7 +49,7 @@ keytool -genkeypair \
 -keysize 2048 \
 -validity 365 \
 -keystore "${filePathMap['KEYSTORE_FILE_PATH']}" \
--dname 'CN=KDDI, OU=IT, O=MyCompany, L=Tokyo, ST=Tokyo, C=JP' \
+-dname "$DNAME_INFO" \
 -storepass "$PASSWD" \
 -keypass "$PASSWD"
 
