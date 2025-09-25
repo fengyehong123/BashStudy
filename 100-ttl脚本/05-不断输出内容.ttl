@@ -1,0 +1,15 @@
+i = 0
+
+; 无限循环向远端终端输出 hello world
+while 1
+
+    ; 数字 转换为 数字字符串
+    int2str strNum i
+    ; 打印一次 Hello World
+    sendln 'echo "Hello_world_' strNum '"'
+    i = i + 1
+
+    ; 暂停5秒钟
+    pause 5
+    
+endwhile
