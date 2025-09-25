@@ -142,3 +142,9 @@ sendln 'echo 插入之后的字符串为: ' str7
 ; 插入之后的字符串为: axyzbc
 wait username
 
+; 字符串剪切
+strcopy 'c1hbt01a;batch服务器' 0 8 serverName
+sendln 'echo 剪切之后的服务器名称为: ' serverName
+wait username
+
+
