@@ -1,0 +1,154 @@
+;=====================================================================
+; 服务器地址
+HOSTADDR = '192.168.137.129'
+; 服务器用户名
+USERNAME = 'apluser'
+; 获取ttl脚本的名称(ttl的宏脚本在启动的时候, param1参数的值就被赋予为当前ttl脚本的名称)
+current_ttl_script_name = param1
+;=====================================================================
+
+; 制作临时私钥文件
+call make_tmp_privatekey
+
+; 构造连接服务器的字符串
+sprintf2 connect_server_cmd '%s:22 /ssh /auth=publickey /user=%s /keyfile=%s' HOSTADDR USERNAME priatekey_script_full_temp_path
+
+; 连接服务器
+connect connect_server_cmd 
+wait USERNAME
+
+; 服务器登录成功之后, 删除临时的私钥文件
+filedelete priatekey_script_full_temp_path
+
+; 结束当前ttl脚本
+end
+; _______________________________ 私钥制作 Start _______________________________
+:make_tmp_privatekey
+
+    ; 调用创建临时路径的函数
+    call create_tmp_path
+
+    ; ------ 打开当前ttl脚本 ------
+    ; 整数 <append flag>
+    ;   0: 指针在文件的开头
+    ;   1: 指针在文件的末尾
+    ; 整数 <readonly flag>
+    ;   0: 读写模式打开
+    ;   1: 只读模式打开文件
+    ; -----------------------------
+    fileopen current_ttl_script_handle ttl_script_full_path 0 1
+    if current_ttl_script_handle = -1 then
+        messagebox ttl_script_full_path '打开失败!'
+        setexitcode 1
+        end
+    endif
+
+    ; 创建存放私钥的临时文件
+    filecreate temp_priatekey_file_handle priatekey_script_full_temp_path
+    if result != 0 then
+        messagebox priatekey_script_full_temp_path '做成失败!'
+        setexitcode 1
+        end
+    endif
+
+    ; 密钥开始和结束的标记
+    start_mark = '--BEGIN tmpkey.key'
+    end_mark = '--END tmpkey.key'
+    ; 是否进入密钥区域的标记(0: 未进入; 1: 进入)
+    private_key_area_flag = 0
+
+    ; 开启无限循环, 读取当前ttl文件的内容, 将私钥部分写入临时文件中
+    while 1
+        ; 读取当前ttl脚本的一行, 将这一行写入 line变量中
+        filereadln current_ttl_script_handle line
+
+        ; 找到私钥开始标志，开启写入状态（不把开始标志写入）
+        strmatch line '--BEGIN tmpkey.key'
+        ; 若 result = 0, 则没有匹配到
+        ; 若 result = 1, 则匹配到
+        if result = 1 then
+            private_key_area_flag = 1
+            continue
+        endif
+
+        ; 找到私钥结束标志, 关闭文件句柄, 保存文件, 跳出无限循环
+        strmatch line '--END tmpkey.key'
+        ; 若匹配到最后一行, 则保存临时私钥文件, 跳出无限循环
+        if result = 1 then
+            ; 关闭文件句柄, 保存私钥到临时文件中
+            fileclose temp_priatekey_file_handle
+            ; 关闭打开当前ttl文件的句柄
+            fileclose current_ttl_script_handle
+            break
+        endif
+
+        ; 如果当前处于私钥区域内的话, 就当当前行写入私钥文件中
+        if private_key_area_flag = 1 then
+            filewriteln temp_priatekey_file_handle line
+        endif
+    endwhile
+
+return
+; _______________________________ 私钥制作 End ________________________________
+
+; 创建临时路径的函数
+:create_tmp_path
+    ; 随机生成0到1000的随机数
+    random tmp_file_random_num1 1000
+    random tmp_file_random_num2 1000
+
+    ; 拼接随机私钥文件的名称
+    sprintf2 priatekey_tmp_name 'priatekey_%d_%d.pem' tmp_file_random_num1 tmp_file_random_num2
+    ; 从环境变量中获取临时文件的路径
+    getenv 'TEMP' tmp_folder_path
+    ; 拼接存放私钥文件的临时路径
+    sprintf2 priatekey_script_full_temp_path '%s\%s' tmp_folder_path priatekey_tmp_name
+
+    ; 获取当前ttl脚本所在的文件夹
+    getdir ttl_folder_path
+    ; 拼接ttl脚本的绝对路径
+    sprintf2 ttl_script_full_path '%s/%s' ttl_folder_path current_ttl_script_name
+return
+
+/* ______________________ 私钥内容 Start _______________________
+--BEGIN tmpkey.key
+-----BEGIN OPENSSH PRIVATE KEY-----
+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
+-----END OPENSSH PRIVATE KEY-----
+--END tmpkey.key
+______________________ 私钥内容 End ________________________________ */
