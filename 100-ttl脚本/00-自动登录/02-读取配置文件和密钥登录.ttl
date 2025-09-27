@@ -1,34 +1,71 @@
-;=====================================================================
+;=================================================================================
 ; 服务器地址
 HOSTADDR = '192.168.137.129'
 ; 服务器用户名
 USERNAME = 'apluser'
+; 端口号
+PORT = 22
+;=================================================================================
 ; 获取ttl脚本的名称(ttl的宏脚本在启动的时候, param1参数的值就被赋予为当前ttl脚本的名称)
 current_ttl_script_name = param1
-;=====================================================================
+; 初始化配置文件的名称
+ini_file_name = 'TERATERM.INI'
+;=================================================================================
 
+; 调用创建临时路径的函数
+call create_tmp_path
+; 初始化配置文件
+call init_ini_config_file
 ; 制作临时私钥文件
 call make_tmp_privatekey
 
-; 构造连接服务器的字符串
-sprintf2 connect_server_cmd '%s:22 /ssh /auth=publickey /user=%s /keyfile=%s' HOSTADDR USERNAME priatekey_script_full_temp_path
+; --------------------------------
+; ⏹构造连接服务器的字符串
+; 在连接的时候
+;   1. /F → 表示读取连接配置文件
+;   2. 指定用户名
+;   3. 指定密钥的路径
+; --------------------------------
+sprintf2 connect_server_cmd '/F=%s %s:%d /ssh /auth=publickey /user=%s /keyfile=%s' ini_config_full_path HOSTADDR PORT USERNAME priatekey_script_full_temp_path
 
 ; 连接服务器
 connect connect_server_cmd 
-wait USERNAME
+wait '$'
 
 ; 服务器登录成功之后, 删除临时的私钥文件
 filedelete priatekey_script_full_temp_path
+; 删除临时的初始化文件
+filedelete ini_config_full_path
 
 ; 结束当前ttl脚本
 end
-; _______________________________ 私钥制作 Start _______________________________
-:make_tmp_privatekey
 
-    ; 调用创建临时路径的函数
-    call create_tmp_path
+; 创建临时路径的函数
+:create_tmp_path
+    ; 随机生成0到1000的随机数
+    random tmp_file_random_num1 1000
+    random tmp_file_random_num2 1000
 
-    ; ------ 打开当前ttl脚本 ------
+    ; 拼接随机私钥文件的名称
+    sprintf2 priatekey_tmp_name 'priatekey_%d_%d.pem' tmp_file_random_num1 tmp_file_random_num2
+    ; 从环境变量中获取临时文件的路径
+    getenv 'TEMP' tmp_folder_path
+    ; 拼接存放私钥文件的临时路径
+    sprintf2 priatekey_script_full_temp_path '%s\%s' tmp_folder_path priatekey_tmp_name
+
+    ; 获取当前ttl脚本所在的文件夹
+    getdir ttl_folder_path
+    ; 拼接ttl脚本的绝对路径
+    sprintf2 ttl_script_full_path '%s\%s' ttl_folder_path current_ttl_script_name
+return
+
+; 初始化配置文件
+:init_ini_config_file
+    ; 拼接ini配置文件的路径
+    ; 指定加载当前ttl脚本同级目录的ini文件
+    sprintf2 template_ini_config_full_path '%s\%s' ttl_folder_path ini_file_name
+
+    ; ------ 打开当前ini配置文件 ------
     ; 整数 <append flag>
     ;   0: 指针在文件的开头
     ;   1: 指针在文件的末尾
@@ -36,12 +73,69 @@ end
     ;   0: 读写模式打开
     ;   1: 只读模式打开文件
     ; -----------------------------
-    fileopen current_ttl_script_handle ttl_script_full_path 0 1
-    if current_ttl_script_handle = -1 then
-        messagebox ttl_script_full_path '打开失败!'
+    fileopen template_ini_file_handle template_ini_config_full_path 0 1
+    if template_ini_file_handle = -1 then
+        messagebox template_ini_config_full_path '打开失败!'
         setexitcode 1
         end
     endif
+
+    ; 创建一个新的ini配置文件
+    sprintf2 ini_config_full_path '%s\%s_temp' ttl_folder_path ini_file_name
+    filecreate ini_file_handle ini_config_full_path
+    if result != 0 then
+        messagebox 'ttl脚本的ini配置文件做成失败!' 'ERROR!'
+        setexitcode 1
+        end
+    endif
+
+    ; ______________ 配置文件内容 _______________
+    ConfigLogDefaultPath = 'LogDefaultPath='
+    ConfigTerminalSize = 'TerminalSize='
+    ; __________________________________________
+
+    ; 打开模板配置文件, 将内容输出到新的临时配置文件中
+    while 1
+        ; 读取模板文件中的1行
+        filereadln template_ini_file_handle line
+        if result != 0 then
+            break
+        endif
+
+        ; 字符串比较
+        strcompare line ConfigLogDefaultPath
+        if result = 0 then
+            ; 获取桌面路径
+            getspecialfolder desktop_path "AllUsersDesktop"
+            ; 拼接新路径
+            sprintf2 ConfigLogDefaultPathNew '%s%s' ConfigLogDefaultPath desktop_path
+
+            ; 修改配置文件内容
+            strreplace line 1 ConfigLogDefaultPath ConfigLogDefaultPathNew
+        endif
+
+        strcompare line ConfigTerminalSize
+        if result = 0 then
+            ; 拼接新的配置内容
+            sprintf2 ConfigTerminalSizeNew '%s%s' ConfigTerminalSize '200,60'
+            ; 修改配置文件内容
+            strreplace line 1 ConfigTerminalSize ConfigTerminalSizeNew
+        endif
+
+        ; 写入新文件
+        filewriteln ini_file_handle line
+    endwhile
+
+    ; 关闭文件句柄, 保存文件
+    fileclose ini_file_handle
+    fileclose template_ini_file_handle
+    
+return
+; _______________________________ 私钥制作 Start _______________________________
+:make_tmp_privatekey
+
+    ; 打开当前ttl脚本
+    fileopen current_ttl_script_handle ttl_script_full_path 0 1
 
     ; 创建存放私钥的临时文件
     filecreate temp_priatekey_file_handle priatekey_script_full_temp_path
@@ -90,25 +184,6 @@ end
 
 return
 ; _______________________________ 私钥制作 End ________________________________
-
-; 创建临时路径的函数
-:create_tmp_path
-    ; 随机生成0到1000的随机数
-    random tmp_file_random_num1 1000
-    random tmp_file_random_num2 1000
-
-    ; 拼接随机私钥文件的名称
-    sprintf2 priatekey_tmp_name 'priatekey_%d_%d.pem' tmp_file_random_num1 tmp_file_random_num2
-    ; 从环境变量中获取临时文件的路径
-    getenv 'TEMP' tmp_folder_path
-    ; 拼接存放私钥文件的临时路径
-    sprintf2 priatekey_script_full_temp_path '%s\%s' tmp_folder_path priatekey_tmp_name
-
-    ; 获取当前ttl脚本所在的文件夹
-    getdir ttl_folder_path
-    ; 拼接ttl脚本的绝对路径
-    sprintf2 ttl_script_full_path '%s/%s' ttl_folder_path current_ttl_script_name
-return
 
 /* ______________________ 私钥内容 Start _______________________
 --BEGIN tmpkey.key
